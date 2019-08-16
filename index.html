@@ -15,6 +15,11 @@
 		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
 	</head>
 	<body class="is-preload">
+			<div id="footer">
+					<ul class="copyright">
+						<li>&copy; Matthew Jones</li><li>mjjply2@gmail.com</li><li>(510)-650-5167</li><!--li>Design: <a href="http://html5up.net">HTML5 UP</a></li-->
+					</ul>
+				</div>
 
 		<!-- Wrapper-->
 			<div id="wrapper">
@@ -22,10 +27,10 @@
 				<!-- Nav -->
 					<nav id="nav">
 						<a href="#" class="icon solid fa-home"><span>Home</span></a>
-						<a href="#work" class="icon solid fa-folder"><span>Work</span></a>
-						<a href="#contact" class="icon solid fa-envelope"><span>Contact</span></a>
-						<a href="http://www.github.com/mjjply42" target="_blank" class="github icon solid"><img src="images/Github_logo.png" style="height: 40px;" alt=""/></a>
-						<a href="https://www.linkedin.com/in/matthew-jones-4682ab126/" target="_blank" class="linkedin icon solid"><img src="images/linkedin_logo.png" style="height: 34px;" alt=""/></a>
+						<a href="#work" class="icon solid fa-folder"><span>Projects</span></a>
+						<!--a href="#contact" class="icon solid fa-envelope"><span>Contact</span--></a>
+						<a href="http://www.github.com/mjjply42" target="_blank" class="github icon solid"><img src="images/Github_logo.png" style="height: 40px;" alt=""/><span>Github</span></a>
+						<a href="https://www.linkedin.com/in/matthew-jones-4682ab126/" target="_blank" class="linkedin icon solid"><img src="images/linkedin_logo.png" style="height: 34px;" alt=""/><span>Linkedin</span></a>
 					</nav>
 
 				<!-- Main -->
@@ -195,7 +200,7 @@
 								<header>
 									<h2>Contact Me</h2>
 								</header>
-								<form action="send_email.php" method="post">
+								<form action="" method="post">
 									<div>
 										<div class="row">
 											<div class="col-6 col-12-medium">
@@ -223,7 +228,7 @@
 				<!-- Footer -->
 					<div id="footer">
 						<ul class="copyright">
-							<li>&copy; Matthew Jones</li><!--li>Design: <a href="http://html5up.net">HTML5 UP</a></li-->
+							<li>&copy; Matthew Jones</li><li>mjjply2@gmail.com</li><li>(510)-650-5167</li><!--li>Design: <a href="http://html5up.net">HTML5 UP</a></li-->
 						</ul>
 					</div>
 
@@ -235,13 +240,15 @@
 			<script src="assets/js/breakpoints.min.js"></script>
 			<script src="assets/js/util.js"></script>
 			<script src="assets/js/main.js"></script>
+			<script type="text/javascript" src="js/mandrill.min.js"></script>
+			<script type="text/javascript" src="js/jquery.emailMandrill.js"></script>
 <script type="text/javascript" src="//code.jquery.com/jquery-1.11.0.min.js"></script>
 <script type="text/javascript" src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
 <script type="text/javascript" src="https://kenwheeler.github.io/slick/slick/slick.js"></script>
 <script type="text/javascript">
 	$(document).ready(function(){
 	  $('.your-class').slick({
-		slidesToShow: 6,
+		slidesToShow: 4,
 		slidesToScroll: 2,
 		infinite: true,
 		autoplay: true,
@@ -295,22 +302,42 @@ img {
   <script>
 	  var name = document.querySelector(".NAME").value;
 	  var email = document.querySelector(".EMAIL").value;
-	  var subject = document.querySelector(".SUBJECT").value;
+	  var subject1 = document.querySelector(".SUBJECT").value;
 	  var message = document.querySelector(".MESSAGE").value;
-		$(document).ready(function() {
-		  $(".SEND").click(function() {
-			$.ajax({
-			  type: "Post",
-			  url: "send_email.php",
-			  data: 			  
-				  {name, email, subject, message},
-			  success: function() {
-				alert("Email Has Been Sent");
-			  }
-			});
-		  });
-	  
-		});	
+	  $('.SEND').click(function() {
+        $.ajax(
+        {
+            type: "POST",
+            url: "https://mandrillapp.com/api/1.0/messages/send.json",
+            data: {
+                'key': 'd39dd8ed00aa3b45350d39108859665d-us3',
+                'message': {
+                    'from_email': email,
+                    'from_name': name,
+
+                    'subject': 'Website Contact Form',
+                    'text': msg,
+                    'to': [
+                    {
+                        'email': 'mjjply42@gmail.com',
+                        'name': 'Taimur K Naziri',
+                        'type': 'to'
+                    }]
+                }
+            }
+        })
+        .done(function(response) {
+            alert('Your message has been sent. Thank you!'); // show success message
+            $("#NAME").val(''); // reset field after successful submission
+            $("#EMAIL").val(''); // reset field after successful submission
+			$("#MESSAGE").val(''); // reset field after successful submission
+			$("#SUBJECT").val(''); // reset field after successful submission
+        })
+        .fail(function(response) {
+            alert('Error sending message.');
+        });
+        return false; // prevent page refresh
+});
   </script>
 	</body>
 </html>
